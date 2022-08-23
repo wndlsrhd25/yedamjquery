@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+
+</head>
+<body>
+  <form id="info">
+    <div>
+      <label for="user_name">이름</label>
+      <input type="text" name="user_name" id="user_name">
+    </div>
+    <div>
+      <label for="user_dept">소속</label>
+      <select name="user_dept" id="user_dept">
+        <option value="student">학생</option>
+        <option value="teacher">교수</option>
+      </select>
+    </div>
+    <div>
+      <label for="user_hobby">취미</label>
+      <input type="checkbox" name="user_hobby" value="독서">독서
+      <input type="checkbox" name="user_hobby" value="영화">영화
+      <input type="checkbox" name="user_hobby" value="글쓰기">글쓰기
+    </div>
+    <button type="button" name="input" id="input" onclick="javascript:jqEvent2();">등록</button>
+  </form>
+  <div id="show">
+      <table style="border: 1px solid black;">
+        <thead>
+          <tr>
+            <th>이름</th>
+            <th>소속</th>
+            <th>취미1</th>
+            <th>취미2</th>
+            <th>취미3</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+  </div>
+<script>
+
+  //자바 스크립트
+  /* function jqEvent2(){
+    let name = document.getElementById('user_name').value;
+    console.log(name);
+
+    let dept = document.getElementById('user_dept');
+    let deptValue = dept.options[dept.selectedIndex].value;
+    console.log(deptValue);
+
+    let hobby = document.querySelectorAll('input[name=user_hobby]:checked');
+    console.log(hobby);
+
+
+    let content = "<tr>";
+  
+    content+="<td>"+name+"</td>";
+    content+="<td>"+deptValue+"</td>";
+
+    for(let i=0; i<hobby.length; i++){
+      content+="<td>"+hobby[i].value+"</td>";
+    }
+    content+="</tr>";
+
+    let tbody = document.querySelector('tbody');
+    tbody.innerHTML += content;
+
+  }
+  */
+
+    //제이쿼리
+  /* function jqEvent2(){
+
+    let name = $('#user_name').val();
+  
+    //selected -> select 박스의 선택된 값
+    let dept = $('#user_dept :selected').text();
+
+
+    //checked -> checkbox, radio의 선택된 값 --복수로 처리할때 이런식으로 해야함
+    let hobby = $("input[name='user_hobby']:checked");
+    
+
+    let content = "<tr>";
+    content+="<td>"+name+"</td>";
+    content+="<td>"+dept+"</td>";
+    
+    for (let i=0; i<hobby.length; i++){
+      content+="<td>"+hobby[i].value+"</td>";
+    }
+
+    content+="</tr>";
+    $('tbody').append(content);
+  
+  }
+*/
+
+  //교수님과 함께 제이쿼리
+  /* function jqEvent2(){
+
+    let name = $('#user_name').val();
+    let dept = $('#user_dept :selected').text();
+    let hobbies = $('#info > div:last :checked'); //유사배열
+
+    let tr = $('<tr/>');
+    tr.append($('<td />').text(name));
+    tr.append($('<td />').text(dept));
+
+    for(let i=0; i<hobbies.length; i++){
+      let td = $('<td />').text(hobbies[i].value);
+      tr.append(td);
+    }
+
+    $('tbody:first').append(tr);
+  }
+  */
+
+  //교수님과 함께 자바스크립트
+  function jqEvent2(){
+    let name = document.getElementById('user_name').value;
+    let select = document.getElementById('user_dept');
+    let dept = select.options[select.selectedIndex].textContent;
+    let hobbies = document.querySelectorAll('input[name="user_hobby"]:checked');
+
+    //이름
+    let tr = document.createElement('tr');
+    let td = document.createElement('td');
+    td.textContent = name;
+    tr.appendChild(td);
+
+    //소속
+    td = document.createElement('td');
+    td.textContent= dept;
+    tr.appendChild(td);
+
+    //취미
+    hobbies.forEach(element => {
+      td = document.createElement('td');
+      td.textContent = element.value;
+      tr.appendChild(td);
+    });
+
+    document.getElementsByTagName('tbody')[0].appendChild(tr);
+
+  }
+
+
+  let tag = $('<tr/>');
+  let aTag = $('<a href="https://www.naver.com" target="_blank">네이버</a>');
+  console.log(tag, aTag)
+  $('div:last').append(tag).append(aTag);
+
+
+</script>
+
+</body>
+</html>
+
