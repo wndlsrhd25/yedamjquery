@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <style>
+    .aqua {background-color: aqua;}
+    .red {background-color: red;}
+    .green {background-color: green;}
+    .yellow {background-color: yellow;}
+  </style>
+</head>
+<body>
+  <div id="ex01">
+    <h1>
+      <strong>객체조작 및 생성</strong>
+    </h1>
+    <section id="sec_1">
+      <h2>
+        <em>html()</em>
+      </h2>
+      <p>내용1</p>
+    </section>
+    <section id="sec_2">
+      <h2>
+        <em>text()</em>
+      </h2>
+      <p>내용2</p>
+    </section>
+  </div>
+
+  <script>
+    /*
+    1. text() : 텍스트
+    2. html() : 텍스트뿐만 아니라 태그
+    3. val() : value 속성의 값
+    4. css() : style 속성의 값
+    5. class - > addClass(), 클래스 기존의 값에서 추가(주의 - text는 추가하는게 아니라 변경(값을 덮어씀))
+                removeClass(), 클래스 기존의 값에서 삭제
+                toggleClass(), 원하는 값이 있는 경우 제거, 없으면 추가
+                hasClass() 내가 원하는 값이 있는지 체크
+    6. 그 외 : attr(), element가 가지는 속성값이나 정보를 조회(style, src, rowspan 등)
+              prop() element가 가지는 실제적인 상태(활성화, 체크 , 선택여부)
+    */
+  
+    //html()
+    let result1 = $('#sec_1').html();
+    console.log(result1);
+    // \는 "을 그대로 넘겨주기 위해서
+    $('#sec_1 p').html("<a href=\"#\">Text1</a>");
+
+    //text()
+    let result2 = $('#sec_2').text();
+    console.log(result2);
+    $('#sec_2 h2 em').text('text()');
+
+  </script>
+  <div id="ex02">
+    <p id="p1">내용1</p>
+    <p id="p2" class="red">내용2</p>
+    <p id="p3">내용3</p>
+    <p id="p4" class="green">내용4</p>
+    <p id="p5" class="yellow">내용5</p>
+    <p id="p6"></p>
+  </div>
+  <script>
+    //addClass() : class 속성에 값 추가
+    $('#p1').addClass('aqua');
+
+    //removeClass() : class 속성에 해당 값을 삭제
+    $('#p2').removeClass('red');
+
+    //toggleClass() : class  속성 중에 해당 값이 존재한다면 삭제, 없으면 생성
+    $('#p3').toggleClass('green');
+    $('#p4').toggleClass('green');
+
+    //hasClass() : class 속성 중에 해당 값의 존재여부
+    $('#p6').text(
+      $('#p5').hasClass('yellow')
+    );
+
+  </script>
+
+
+  <input type="checkbox" id="test1" checked="checked"> test1
+  <input type="checkbox" id="test2"> test2
+  <div class="testlog"></div>
+
+  <script>
+    //input checkbox에 change가 일어나면 밑에 코드가 실행됨
+    $('input:checkbox').change('on', function(){
+      $('div.testlog').html(
+        '<br/> check1 .attr("checked") : ' + $('#test1').attr('checked')
+        + '<br/> check2 .attr("checked") : ' + $('test2').attr('checked')
+        + '<br/> check1 .prop("checked") : ' + $('#test1').prop('checked')
+        //is -> 선택자로 넘겼던 조건과 같은지
+        + '<br/ > check1 .is("checked") : ' + $('#test1').is(":checked")
+      )
+    })
+  </script>
+  <div id="ex03">
+    <h1>
+      <strong>객체 조작 및 생성</strong>
+    </h1>
+    <section id="sec01">
+      <h2>
+        <img src="clover.PNG" alt="이미지" style = "border : 2px solid black">
+      </h2>
+    </section>
+    <a id="get_comment" href="#comments">코멘트</a>
+  </div>
+
+  <script>
+    /*
+    //attr() -> html의 attribute를 조작
+    let val1 = $('#sec01 img').attr('src');
+    console.log(val1);
+    $('#sec01 img').attr('width',200);
+    $('#sec01 img').attr({
+      "alt" : "카드",
+      "height" : 100
+    })
+
+    //css도 가능
+    $('#sec01 img').css({
+      "color" : "red",
+      "border" : "2px solid green"
+    })
+
+    //속성 자체를 흔적도 없이 제거하는것
+    $('#sec01 img').removeAttr('src');
+    */
+
+    // prop() : DOM 객체의 property를 조작
+    let var1 = $('#sec01 img').prop('src');
+
+    console.log(var1);
+
+    $('#sec01 img').prop('width',200);
+    
+
+
+  </script>
+</body>
+</html>
