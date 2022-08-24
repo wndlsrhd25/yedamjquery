@@ -1,44 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-</head>
-<body>
-  <h2>$(this)</h2>
-  <ul class="menuWrap_1">
-    <li><a href="#">메뉴1</a></li>
-    <li><a href="#">메뉴2</a></li>
-    <li><a href="#">메뉴3</a></li>
-  </ul>
-  <ul class="menuWrap_2">
-    <li><a href="#">메뉴4</a></li>
-    <li><a href="#">메뉴5</a></li>
-    <li><a href="#">메뉴6</a></li>
-  </ul>
-  <p class="idxNum"></p>
-  <script>
-    $('.menuWrap_1 a').on('click',function(e){
-      e.preventDefault();
-      //1. 클래스 값이 menuWrap_1인 태그의 하위요소 중 모든 a 태그에 배경색을 파랑으로 변경
-      $('.menuWrap_1 a').css({'background-color' : 'blue'});
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  </head>
+  <body>
+    <h2>$(this)</h2>
+    <ul class="menuWrap_1">
+      <li><a href="#">메뉴1</a></li>
+      <li><a href="#">메뉴2</a></li>
+      <li><a href="#">메뉴3</a></li>
+    </ul>
+    <h2>$(index)</h2>
+    <ul class="menuWrap_2">
+      <li><a href="#">메뉴4</a></li>
+      <li><a href="#">메뉴5</a></li>
+      <li><a href="#">메뉴6</a></li>
+    </ul>
+    <p class="idxNum"></p>
+    <script>
+      $(".menuWrap_1 a").on("click", function (e) {
+        e.preventDefault();
+        //1. 클래스 값이 menuWrap_1인 태그의 하위요소 중 모든 a 태그에 배경색을 파랑으로 변경
+        $(".menuWrap_1 a").css({ "background-color": "blue" });
 
-      //2. 실제로 click 이벤트가 발생한 태그에 한해서 배경색을 핑크로 변경
+        //2. 실제로 click 이벤트가 발생한 태그에 한해서 배경색을 핑크로 변경
+        $(e.target).css({ "background-color": "pink" });
+      });
 
-    });
+      $(".menuWrap_2 a").click(function (e) {
+        e.preventDefault();
+        //3. 클래스 값이 menuWrap_2인 태그의 하위요소 중 모든 a 태그에 배경색을 녹색으로 변경
+        $(".menuWrap_2 a").css({ "background-color": "green" });
 
-    $('.menuWrap_2 a').click(function(e){
-      e.preventDefault();
-      //3. 클래스 값이 menuWrap_2인 태그의 하위요소 중 모든 a 태그에 배경색을 녹색으로 변경
-      
-      //4. 실제로 click 이벤트가 발생한 태그에 한해서 배경색을 회색으로 변경
-
-      //5. 실제로 click 이벤트가 발생한 태그에 텍스트 값을 p 태그에 랜더링(가지고 있는 값을 복사해서 p태그에 붙여넣어라)
-
-    }))
-  </script>
-</body>
+        //4. 실제로 click 이벤트가 발생한 태그에 한해서 배경색을 회색으로 변경
+        $(e.target).css({ "background-color": "gray" });
+        //5. 실제로 click 이벤트가 발생한 태그에 텍스트 값을 p 태그에 랜더링(가지고 있는 값을 복사해서 p태그에 붙여넣어라)
+        $(".idxNum").text($(e.target).text());
+      });
+    </script>
+  </body>
 </html>
