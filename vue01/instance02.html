@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <style>
+    .strike-through{
+      text-decoration: line-through;
+      color: lightgrey;
+    }
+    .dark {
+      background-color: gray;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- v-bind : 속성와 바인딩 -->
+    <img src="clover.PNG" style="width : 20%;">직접 지정
+    <img v-bind:src="fileName" v-bind:style="styleObject">v-bind로 지정
+  </div>
+  <script>
+    let app = new Vue({
+      el : '#app',
+      data : {
+        fileName : 'clover.PNG',
+        styleObject : {
+          width : '20%',
+          border : '1px solid black'
+        }
+      }
+    })
+    // 자바스크립트
+    let a = document.querySelector('img:first').setAttribute('css','width : "50%"');
+
+
+  </script>
+</body>
+</html>
