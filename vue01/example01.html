@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>입력폼 활용</h1>
+    <label> 이름 : <input placeholder="홍길동" type="text" v-model.lazy="myName"></label>
+    <p>좋아하는 색은 : </p>
+    <div>
+      <label><input type="radio" v-model="radioColor" value="red">빨강</label><br>
+      <label><input type="radio" v-model="radioColor" value="green">녹색</label><br>
+      <label><input type="radio" v-model="radioColor" value="blue">파랑색</label><br>
+      <label><input type="radio" v-model="radioColor" value="yellow">노란색</label><br>
+      <label><input type="radio" v-model="radioColor" value="gray">회색</label><br>
+      <label><input type="radio" v-model="radioColor" value="pink">핑크색</label><br>
+    </div>
+    <!-- 출력 예시 : 내이름은 홍길동이고 좋아하는 색은 blue 입니다.-->
+    <!-- 단, 이름은 입력이 끝난 후 포커스가 이동되었을 때 반영하도록 할 것-->
+    <!-- 해당 <p>태그에 선택된 색깔로 배경색을 지정-->
+    <p v-bind:style="{'background-color' : radioColor } "> 내이름은 {{ myName }}이고, 좋아하는 색은 {{ radioColor }} 입니다.</p>
+  </div>
+  <script>
+    let app = new Vue({
+      el : '#app',
+      data :{
+        myName : '',
+        radioColor : ''
+      }
+    });
+  </script>
+</body>
+</html>

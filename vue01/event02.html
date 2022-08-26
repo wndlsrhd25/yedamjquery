@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
+  <style>
+    .tag{
+      border :1px solid gray;
+    }
+  </style>
+</head>
+<body>
+  <!--
+    이벤트 수식어 -> on 디렉티브에 연결하는 이벤트 동작을 제어
+    .stop : 이벤트 버블링(이벤트 전파를) 중단
+    .prevent : 기본 이벤트 핸들러를 중지
+    .capture : 이벤트 캡쳐링 중단
+    .self : event 객체의 target == currentTarget 인 경우에만 이벤트 핸들러 동작
+    .once : 최대 한번만 트리거
+  -->
+  <!-- $()자동으로 넘겨주지 않기 때문에 직접 지정해서 넘겨줘야함-->
+  <button id="btn" v-on:click="warn('Form cannot be submitted yet', $event)">
+    submit
+  </button>
+  <!-- $event :  원본 DOM 이벤트 객체 -->
+
+
+  <script>
+    new Vue ({
+      el : '#btn',
+      methods : {
+        warn : function(message,event){
+            if(event){
+              console.log(event.target);
+              console.log(event.currentTarget);
+              console.log(event);
+              event.preventDefault();
+            }
+            alert(message);
+        }
+      }
+    })
+  </script>
+  <div id="app" v-bind:class="style">
+    <!-- v-on:을 @로 대체해서 사용 -->
+    <form action="http://www.naver.com" :class="style" @click="printMessage('form 태그 선택')" v-on:submit.prevent>
+      <div v-bind:class="style" v-on:click.stop = "printMessage('div 태그 선택')">
+      <p v-bind:class="style" @click.self.once="printMessage('p 태그 선택')">
+        <a v-bind:class="style" href="http://www.google.com" v-on:click.prevent="printMessage('a 태그 선택')">구글로 이동</a>
+      {{ message }}
+      </p>
+      </div>
+      <button>form</button>
+    </form>
+    <div :class="style">
+      <span @click="changeMessage($event), alertExecute()">이벤트 핸들러 복수 실행</span>
+    </div>
+  </div>
+  <script>
+    let app =new Vue({
+      el : '#app',
+      data : {
+        style : 'tag',
+        message : ''
+      },
+      methods : {
+        printMessage : function(message){
+          this.message = message;
+          alert(this.message);
+        },
+        changeMessage : function(event){
+          if(event){
+            console.log(event.target);
+            this.message = "이벤트 실행 target : " + event.target;
+          }
+        },
+        alertExecute : function(){
+          alert('이벤트 핸들러 복수 등록')
+          
+        }
+      }
+    });
+  </script>
+  <br>
+  <div id="app2">
+    <input type="number" v-model.number="price"> 원 <br>
+    <input type="number" v-model.number="count"> 개 <br>
+    <p> 합계 : {{ sum }} 원 </p>
+    <p> 부가세 포함 금액 : {{ taxIncluded }} 원</p>
+    <br><hr><br>
+    <p>감상은 140자 이내로 입력해주세요</p>
+    <textarea v-model="myText" cols="30" rows="10" maxlength="140"></textarea>
+    <p v-bind:style="{ color : computedColor }">남은 글자는 {{ remaining }} 입니다. </p>
+    <!-- <p v-text="printDate()"></p> -->
+    <!-- <button @click="getDate">날짜</button> -->
+  </div>
+  <script>
+    let app2 = new Vue({
+      el : '#app2',
+      //기본 프로퍼티
+      data : {
+        price : 0,
+        count : 0,
+        myText : ''
+      },
+      //산출 프로퍼티 : 기본 프로퍼티를 이용하여 연산을 한 값(읽기 전용)
+      //연관된 기본 프로퍼티에 의존적인 성향 -> 기본 프로퍼티의 변화에만 반응해서 연산
+      computed : {
+        sum : function(){
+          //매개변수가 존재하지 않고 반드시 return 구문이 필요
+          return this.price * this.count;
+        },
+        taxIncluded : function(){
+          return Math.floor(this.sum * 1.1);
+        },
+        remaining : function(){
+          return 140-this.myText.length;
+        },
+        computedColor : function(){
+          let col = "green";
+          if(this.remaining <20){
+            col='orange';
+          }
+          if(this.remaining<1){
+            col = 'red';
+          }
+          return col;
+        }
+      },
+      methods : {
+      printDate : function () {
+        return '오늘 날짜 : '+Date.now();
+      },
+      getDate : function () {
+        alert(this.printDate());
+      }
+      }
+      
+    });
+  </script>
+  <div id="app3">
+    <!-- 사용자가 입력하는 문장 중에 금지문자가 있을 경우 제거 -->
+    <p>금지문자 [ {{ forbiddenText }} ]</p>
+    <textarea v-model="inputText" cols="30" rows="10"></textarea>
+    <br>
+    <br>
+    <!-- start 버튼을 누르면 정해진 시간이 실시간으로 줄어드는 경우 -->
+    <p> 앞으로 {{ restSec }}</p>
+    <button v-on:click="startTimer">START</button>
+  </div>
+  <script>
+    let app3= new Vue({
+      el : '#app3',
+      data : {
+        forbiddenText :'보강',
+        inputText : '집에 가고 싶어요ㅠㅠ',
+        restSec :5,
+        timerObj : null
+      },
+      //watch : 프로퍼티(기본,산출)를 감시
+      watch :{
+        inputText : function(){
+          // 매개변수 존재하지 않으면 return 구문도 존재하지 않음
+          //alert(this.inputText);
+          // 위치를 반환함
+          let pos = this.inputText.indexOf(this.forbiddenText);
+
+          //indexOf : 해당 문자가 포함되지 않으면 -1, 포함되어 있으면 해당 위치를 반환
+          if(pos>=0){
+          alert(this.forbiddenText + '는 입력할 수 없습니다.');
+          this.inputText = this.inputText.substr(0,pos);
+          //subStr(start,length) : start 인덱스부터 length 길이만큼 리턴
+        }
+      },
+      restSec : function(){
+        if(this.restSec <0 ){
+          alert('제한시간입니다.');
+          clearInterval(this.timerObj);
+        }
+      }
+      },
+      methods : {
+        startTimer : function(){
+          clearInterval(this.timerObj);
+          this.restSec = 5;
+          this.timerObj = setInterval(()=>{this.restSec--},1000);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
