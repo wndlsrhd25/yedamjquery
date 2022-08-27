@@ -29,8 +29,9 @@
       inputText : '',     //입력문자
       limitTime :0,       //제한시간
       wordCnt : 0,        //최종입력문자수
-      resultScore : 0,     //벌점 : 금지문자 1개 * 12점
-      timerObj : null
+      // 밑의 프로퍼티는 vue 인스턴스 내에 사용되는 연산을 위해 존재 (일종의 전역변수)
+      timerObj : null,     // setInterval() 반환값 저장
+      forbiddenCnt : 0    //실제로 사용자가 입력한 금지문자 횟수
     },
     methods : {
         start : function(){
@@ -41,24 +42,49 @@
           this.limitTime = this.setTime;
           this.timerObj = setInterval(()=>{ this.limitTime--}, 1000);
           //세번째 : textarea 태그가 활성화
+        
       }
     },
     watch : {
     limitTime : function(){
       //제한시간이 0에 도달할 경우 처리해야하는 작업
       if(this.limitTime <=0){
-        clearInterval(this.timerObj);
         alert('제한시간이 완료되었습니다');
+        //시간이 더이상 흐르지 않도록
+        clearInterval(this.timerObj);
+        //textarea 비활성화
         this.isWritable = true;
+        //최종적으로 입력된 문자의 개수를 산출
+        this.wordCnt = this.inputText.length;
     }
 
     },
     inputText :  function(){
       //입력된 문자들 중에 금지 문자가 있는지를 확인
+      let dataList = this.forbiddenText.split(',');
+
+      for(let i=0; i<dataList.length; i++){
+      //금지 문자의 포함여부를 indexOf()로 확인
+        let pos = this.inputText.indexOf(dataList[i].trim());
+      //반환 값이 -1보다 크면
+        if(pos >-1){
+          alert(this.forbiddenText + '는 입력할 수 없습니다.')
+      //substr() : 처음부터 금지문자 바로 전까지 잘라서 반환
+          this.inputText = this.inputText.substr(0,pos);
+      //제한시간 +10
+          this.limitTime = this.limitTime+10;
+      //금지문자를 입력한 값
+          this.forbiddenCnt++;
+        }
+      }
     }
   },
-  computed :{
-    //벌점 계산하기
+  computed : {
+    //벌점 계산하기 - 금지문자 1개 *12점
+    resultScore : function(){
+      return this.forbiddenCnt*12;
+    }
+
   }
     
 	});
@@ -79,7 +105,7 @@
     <p>남은시간 : {{ limitTime }}초</p>
     <textarea v-model="inputText" v-bind:disabled="isWritable"></textarea>
     <p> {{ wordCnt }}개의 문자를 입력하였습니다.</p>
-    <p> 별점 : {{ resultScore }} (금지문자 1개당 12점)</p>
+    <p> 벌점 : {{ resultScore }} (금지문자 1개당 12점)</p>
   </div>
 </body>
 </html>
