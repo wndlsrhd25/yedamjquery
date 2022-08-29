@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"> 
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Board</title>
@@ -14,8 +14,19 @@
   <div id="app">
     <p>게시판 데이터 json 파일 읽기</p>
     <input type="file" v-on:change="loadData($event)">
-    <button v-on:click="">게시판 저장하기</button>
-    <!-- 게시판 전체 목록 조회 -->
+    <button v-on:click="saveBoardList">게시판 저장하기</button>
+    <!-- 컴포넌트 : 게시판 전체 목록 조회 -->
+    <my-board-list v-if="listOk" v-bind:object="dataArray['board']"
+                    v-on:board-read="boardRead"
+                    v-on:board-write="boardWrite"
+                    v-on:board-delete="boardDelete"></my-board-list>
+    <!-- 컴포넌트 : 게시판 상세 조회 -->
+    <my-board-read v-if="readOk" v-bind:object="boardInfo"
+                    v-on:board-list="boardList"></my-board-read>
+    <!-- 컴포넌트 : 글쓰기 -->
+    <my-board-write v-if="writeOk"
+                    v-on:board-list="boardList"
+                    v-on:board-save="boardSave"></my-board-write>
   </div>
   <script>
     document.addEventListener('DOMContentLoaded', function(){
@@ -23,17 +34,25 @@
       let app = new Vue({
         el : '#app',
         data : {
-          dataArray : []
+          dataArray : [],
+          boardInfo : {},
+          listOk : false,
+          readOk : false,
+          writeOk : false
       },
       components : {
-
+        'my-board-list' : myBoardList,
+        'my-board-read' : myBoardRead,
+        'my-board-write' : myBoardWrite
       },
       methods : {
         loadData : function(event){
           let file = event.target.files[0].name; //등록된 파일명
-          if(file){
-            let vueObj = this;
           
+          if(file){
+            //뷰인스턴스 값을 받아와서 아작스로 접근해라
+            let vueObj = this;
+          /*
           $.ajax({
             url : file,
             type : "get",
@@ -46,12 +65,189 @@
               console.log(reject);
             }
           })
+          */
+          //fetch는 호출하는 시점, 배경이 되는 존재에 대해서 호출함
+          fetch(file)
+          .then(response => response.json()) //json 파싱 단계
+          .then(data => { //data : object 타입 or array 타입 
+            this.dataArray = data; //this : vue 인스턴스
+            //파일선택을 누르면 널이 아닐때 리스트가 뜨게함
+            if(this.dataArray !=null && this.dataArray['board'].length>0){
+              this.listOk=true;
+            }
+          }).catch(err => console.log(err));
           }
+        },
+        boardList : function(){
+          //목록으로
+          this.listOk = true;
+          this.readOk = false;
+          this.writeOk = false;
+
+        },
+        boardWrite : function(){
+          //글쓰기 폼으로
+          this.listOk = false;
+          this.readOk = false;
+          this.writeOk = true;
+        },
+        boardRead : function(info){
+          //게시판 상제 조회
+          this.listOk = false;
+          this.readOk = true;
+          this.writeOk = false;
+
+          this.boardInfo = info;
+          //조회수
+          for(let i=0; i<this.dataArray['board'].length; i++){
+            //글번호랑 리스트에서 같은걸 찾는것
+            if(this.dataArray['board'][i].no == info.no){
+              //                                원래조회수 + 1
+              this.dataArray['board'][i].view = parseInt(this.dataArray['board'][i].view)+1;
+
+            }
+          }
+        },
+        boardDelete : function(no){
+          //글삭제
+          for(let i=0; i<this.dataArray['board'].length; i++){
+            if(this.dataArray['board'][i].no == no){
+              this.dataArray['board'].splice(i,1);
+            }
+          }
+        },
+        boardSave : function(title,content){
+          //글 저장
+            let no = 1;
+            if(this.dataArray['board'].length !=0){
+              //맨 마지막 번호를 가져옴
+              let index = this.dataArray['board'].length-1;
+              //거기서 +1을 하면 다음 번호가 됨
+              no = parseInt(this.dataArray['board'][index].no)+1;
+            }
+            let board_info = {
+              no : no,
+              title: title,
+              content: content,
+              view: '0'
+            }
+
+            this.dataArray['board'].push(board_info);
+
+            this.listOk = true;
+            this.readOk = false;
+            this.writeOk = false;
+          
+        },
+        saveBoardList : function(){
+          //글 파일 저장
+          let data = this.dataArray;
+
+          if(data.length ==0){
+            alert("저장할 게시판 내용이 없습니다.");
+            return;
+          }
+          if(typeof data === 'object'){
+            data = JSON.stringify(data, undefined, 4);
+          }
+          let blob = new Blob([data],{type : 'text/json'});
+          let a = document.createElement('a');
+          a.download = 'board.json';
+          a.href =window.URL.createObjectURL(blob);
+          a.click();
+        },
+        },
+      });
+    });
+    // 컴포넌트 : 게시판 전체 조회
+    const myBoardList =  {
+      template : `<div>
+                    <table id="list">
+                      <tr>
+                        <th style="width:50px;">글번호</th>
+                        <th>글제목</th>
+                        <th style="width:50px;">조회수</th>
+                        <th style="width:70px;"></th>
+                      </tr>
+                      <tr v-for="item in object" v-bind:key="item.no">
+                        <td>{{ item.no }}</td>
+                        <td v-on:click="boardRead(item)">{{ item.title }}</td>
+                        <td>{{ item.view }}</td>
+                        <td><button v-on:click="boardDelete(item.no)">삭제</button></td>
+                      </tr>
+                    </table>
+                    <button style="float:right;" v-on:click="boardWrite">글쓰기</button>
+                  </div>`,
+      props : ['object'],
+      methods : {
+        boardRead : function(info){
+          this.$emit('board-read',info);
+        },
+        boardDelete : function(no){
+          this.$emit('board-delete',no);
+        },
+        boardWrite : function(){
+          this.$emit('board-write');
+        },
+        
+      },
+    };
+
+    // 컴포넌트 : 게시판 상세 조회
+    const myBoardRead = {
+      template : `<div>
+                    <table id="list">
+                      <tr>
+                        <td style="width:50px;">글제목</td>
+                        <td> {{ object.title }}</td>
+                      </tr>
+                      <tr style="height:300px;">
+                        <td colspan="2">{{ object.content }}</td>
+                      </tr>
+                      <button style="float:right;" v-on:click="boardList">목록</button>
+                    </table>
+                  </div>`,
+      props : ['object'],
+      methods : {
+        boardList : function(){
+          this.$emit('board-list');
+        },
+      },
+    };
+    // 컴포넌트 : 글쓰기
+    const myBoardWrite = {
+      template : `<div>
+                    <table id="list">
+                      <tr>
+                        <td>글제목</td>
+                        <td><input type="text" style="width:90%" v-model="title"></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2">
+                          <textarea style="width:100%" v-model="content"></textarea>
+                        </td>
+                      </tr>
+                    </table>
+                    <button style="float:right;" v-on:click="boardList">목록</button>  
+                    <button style="float:right;" v-on:click="boardSave">저장</button> 
+                  </div>`,
+      data : function(){
+        return {
+          title : '',
+          content : ''
+        }
+      },
+      methods : {
+        boardList : function(){
+          this.$emit('board-list');
+        },
+        boardSave : function(){
+          this.$emit('board-save', this.title, this.content);
         }
       }
-      })
-    })
+    }
 
   </script>
+  
 </body>
 </html>
