@@ -9,6 +9,7 @@ import myBoardRead from '../components/myBoardRead.js';
 import myBoardWrite from '../components/myBoardWrite.js';
 
 export default new VueRouter({
+  //history 페이지를 다시 로드하지 않고도 URL 탐색
   mode : "history", // default : hash -> '#'/path
   routes : [
     //main

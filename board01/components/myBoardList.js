@@ -11,15 +11,12 @@ export default {
                   <td>{{ item.no }}</td>
                   <!-- <td v-on:click="boardRead(item)">{{ item.title }}</td> -->
                   <router-link tag="td" v-bind:to="{ name  : 'boardRead', params : { data : item }}">{{ item.title }}</router-link>
-
                   <td>{{ item.view }}</td>
                   <td><button v-on:click="boardDelete(item.no)">삭제</button></td>
                 </tr>
               </table>
               <!-- <button style="float:right;" v-on:click="boardWrite">글쓰기</button> -->
-              <router-link tag="button"
-                            style="float:right;"
-                            v-bind:to="{name : 'boardWrite'}">글쓰기</router-link>
+              <router-link tag="button" style="float:right;" v-bind:to="{name : 'boardWrite'}">글쓰기</router-link>
             </div>`,
   data: function () {
     return {

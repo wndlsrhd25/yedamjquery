@@ -22,11 +22,12 @@ export default {
           .then(data => { 
             this.parentData.dataArray = data; 
 
-            //.sync -> this.$emit('update:프로퍼티',this.프로퍼티) 
+            //.sync -> this.$emit('update:프로퍼티',this.프로퍼티 <-어떤값인지) 
             //sync와 연결된 프로퍼티만 이렇게 사용 가능
             this.$emit('update:parentData', this.parentData);
 
-            this.$router.push({ name: 'boardList'});
+            //router을 이용해서 push(실행하겠다)
+            this.$router.push({ name : 'boardList'});
 
           }).catch(err => console.log(err));
       }
@@ -39,13 +40,15 @@ export default {
             alert("저장할 게시판 내용이 없습니다.");
             return;
           }
-          if(typeof data === 'object'){
+      if (typeof data === 'object') {
+            //모양은 json이지만 객체인 아이를 모양도 json 내용도 json으로 바꾼다
             data = JSON.stringify(data, undefined, 4);
           }
       let blob = new Blob([data], {
         type: 'text/json'
       });
-          let a = document.createElement('a');
+      let a = document.createElement('a');
+          //다운받아 저장할 데이터 이름
           a.download = 'board.json';
           a.href =window.URL.createObjectURL(blob);
           a.click();
