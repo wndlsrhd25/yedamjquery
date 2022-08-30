@@ -16,27 +16,23 @@ export default {
   template,
   data: function () {
     return {
-      items : [],
+      items: [],
       //수정시 필요한 정보
       updateItem: {
-        content : ''
+        content: "",
       },
-    }
+    };
   },
   computed: {
     itemList: function () {
       return this.items;
-    }
+    },
   },
   watch: {
-    updateItem: function () {
-      
-    }
+    updateItem: function () {},
   },
   methods: {
-    loadData: function () {
-      
-    },
+    loadData: function () {},
     checkedItem: function (item) {
       const component = this;
       if (item.todoyn == 1) {
@@ -46,13 +42,14 @@ export default {
       }
 
       $.ajax({
-        url: 'http://192.168.0.83:8088/myserver/todoUpdate',
-        type: 'get',
+        url: "http://192.168.0.83:8088/myserver/todoUpdate",
+        type: "get",
         data: {
           id: 4555,
           no: item.no,
-          todoyn : item.todoyn },
-        dataType: 'json',
+          todoyn: item.todoyn,
+        },
+        dataType: "json",
         success: function (data) {
           console.log(data);
           if (data != null) {
@@ -62,40 +59,40 @@ export default {
         },
         error: function (reject) {
           console.log(reject);
-        }
+        },
       });
     },
     deleteItem: function (no) {
       const component = this;
       $.ajax({
-        url: 'http://192.168.0.83:8088/myserver/todoDelete',
-        type: 'get',
+        url: "http://192.168.0.83:8088/myserver/todoDelete",
+        type: "get",
         data: {
           id: 4555,
-          no : no },
-        dataType: 'json',
+          no: no,
+        },
+        dataType: "json",
         success: function (data) {
           console.log(data);
           if (data != null) {
-            alert('삭제가 완료되었습니다.')
+            alert("삭제가 완료되었습니다.");
             component.$router.go(0);
           }
         },
         error: function (reject) {
           console.log(reject);
-        }
+        },
       });
-      
-    }
+    },
   },
   created: function () {
-    //데이터를 받을거임
+    //생성되자마자 실행되는것, 데이터를 받을거임
     const component = this;
     $.ajax({
-      url: 'http://192.168.0.83:8088/myserver/todoSelect',
-      type: 'get',
-      data: { id : 4555 },
-      dataType: 'json',
+      url: "http://192.168.0.83:8088/myserver/todoSelect",
+      type: "get",
+      data: { id: 4555 },
+      dataType: "json",
       success: function (data) {
         console.log(data);
         if (data != null) {
@@ -104,8 +101,7 @@ export default {
       },
       error: function (reject) {
         console.log(reject);
-      }
-    })
-
-  }
-}
+      },
+    });
+  },
+};
