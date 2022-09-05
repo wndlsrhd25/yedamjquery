@@ -5,7 +5,7 @@ export default new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'selectItems',
+      name: 'todoList',
       component: selectItems,
     },
     {

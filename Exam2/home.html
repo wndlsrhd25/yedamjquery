@@ -1,0 +1,56 @@
+<!-- id는 고유번호 만들긴
+no는 등록할때 자동으로 부여됨
+content는 내용
+todoyn 완료여부 - 체크하면 완료로 수정이 되어야 함
+전부 get 방식으로 해야함
+전체조회할때는 내가 등록한것만 가져올 수 있도록 하기
+수정은 선택하게 되면 no를 넘기면 됨
+삭제는 id와 no을 넘겨야함 -->
+<!-- 
+  TABLE 구조
+ID : 고유번호 ( NUMBER )
+NO : 할일번호 ( NUMBER )
+CONTENTS : 할일내용 ( VARCHAR )
+TODOYN : 완료여부 ( 미완료 : 0 / 완료 : 1 ) ( NUMBER )
+
+
+- 전체조회
+1. URL : http://192.168.0.83:8088/myserver/todoSelect
+2. parameter : id
+
+- 등록
+1. URL : http://192.168.0.83:8088/myserver/todoInsert
+2. parameter : id, contents
+
+- 수정
+1. URL : http://192.168.0.83:8088/myserver/todoUpdate
+2. parameter : id, no, todoyn
+
+- 삭제
+1. URL : http://192.168.0.83:8088/myserver/delete
+2. parameter : id, no
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <!-- Vue.js 와 VueRouter -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router@3.5.3/dist/vue-router.js"></script>
+  <!-- css 파일-->
+  <link rel="stylesheet" href="./css/style.css">
+  <!-- 아작스-->
+  <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+  
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div id="app">
+  </div>
+  
+</body>
+</html>
