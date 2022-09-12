@@ -42,8 +42,8 @@ export default {
       }
 
       $.ajax({
-        url: "http://192.168.0.83:8088/myserver/todoUpdate",
-        type: "get",
+        url: "http://localhost:8088/java/todo",
+        type: "put",
         data: {
           id: 4555,
           no: item.no,
@@ -65,8 +65,8 @@ export default {
     deleteItem: function (no) {
       const component = this;
       $.ajax({
-        url: "http://192.168.0.83:8088/myserver/todoDelete",
-        type: "get",
+        url: "http://localhost:8088/java/todo",
+        type: "delete",
         data: {
           id: 4555,
           no: no,
@@ -89,7 +89,7 @@ export default {
     //생성되자마자 실행되는것, 데이터를 받을거임
     const component = this;
     $.ajax({
-      url: "http://192.168.0.83:8088/myserver/todoSelect",
+      url: "http://localhost:8088/java/todo",
       type: "get",
       data: { id: 4555 },
       dataType: "json",

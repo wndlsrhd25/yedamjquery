@@ -16,8 +16,8 @@ export default {
       //삽입
       const component = this;
       $.ajax({
-        url: "http://192.168.0.83:8088/myserver/todoInsert",
-        type: "get",
+        url: "http://localhost:8088/java/todo",
+        type: "post",
         data: {
           id: "4555",
           contents: component.title,

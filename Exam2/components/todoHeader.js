@@ -7,19 +7,19 @@ export default {
   template,
   data: function () {
     return {
-      title : ''
-    }
+      title: "",
+    };
   },
   methods: {
     addItem: function () {
       const component = this;
       $.ajax({
-        url: 'http://192.168.0.83:8088/myserver/todoInsert',
+        url: "http://localhost:8088/java/todo",
         data: {
           id: 0,
-          contents: component.title
+          contents: component.title,
         },
-        datatype: 'json',
+        datatype: "json",
         success: function (data) {
           if (data != null) {
             alert("TodoList all!!");
@@ -29,8 +29,8 @@ export default {
         },
         error: function (reject) {
           console.log(reject);
-        }
-      })
-    }
-  }
-}
+        },
+      });
+    },
+  },
+};
