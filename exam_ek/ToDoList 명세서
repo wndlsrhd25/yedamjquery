@@ -1,0 +1,22 @@
+TABLE 구조
+ID : 고유번호 ( NUMBER )
+NO : 할일번호 ( NUMBER )
+CONTENTS : 할일내용 ( VARCHAR )
+TODOYN : 완료여부 ( 미완료 : 0 / 완료 : 1 ) ( NUMBER )
+
+
+- 전체조회
+1. URL : http://192.168.0.83:8088/myserver/todoSelect
+2. parameter : id
+
+- 등록
+1. URL : http://192.168.0.83:8088/myserver/todoInsert
+2. parameter : id, contents
+
+- 수정
+1. URL : http://192.168.0.83:8088/myserver/todoUpdate
+2. parameter : id, no, todoyn
+	
+- 삭제
+1. URL : http://192.168.0.83:8088/myserver/todoDelete
+2. parameter : id, no

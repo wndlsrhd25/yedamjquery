@@ -34,6 +34,7 @@ export default {
   methods: {
     loadData: function () {},
     checkedItem: function (item) {
+      console.log(item);
       const component = this;
       if (item.todoyn == 1) {
         item.todoyn = 0;
@@ -44,17 +45,19 @@ export default {
       $.ajax({
         url: "http://localhost:8088/java/todo",
         type: "put",
-        data: {
-          id: 4555,
+        contentType : "application/json",
+        data: JSON.stringify({
+          id: 0,
           no: item.no,
           todoyn: item.todoyn,
-        },
+        }),
         dataType: "json",
         success: function (data) {
-          console.log(data);
+          
           if (data != null) {
             alert("수정이 완료되었습니다.");
-            component.$router.go(0);
+          
+          
           }
         },
         error: function (reject) {
@@ -65,10 +68,10 @@ export default {
     deleteItem: function (no) {
       const component = this;
       $.ajax({
-        url: "http://localhost:8088/java/todo",
+        url: "http://localhost:8088/java/todo/"+no,
         type: "delete",
         data: {
-          id: 4555,
+          id: 0,
           no: no,
         },
         dataType: "json",
@@ -91,7 +94,7 @@ export default {
     $.ajax({
       url: "http://localhost:8088/java/todo",
       type: "get",
-      data: { id: 4555 },
+      data: { id: 0 },
       dataType: "json",
       success: function (data) {
         console.log(data);
